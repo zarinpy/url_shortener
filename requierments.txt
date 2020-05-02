@@ -1,0 +1,15 @@
+# others
+pyyaml==5.3
+ua-parser==0.10.0
+user-agents==2.1
+psycopg2==2.8.4
+
+# django dependencies
+Django==3.0
+django-user-agents==0.4.0
+django-redis==4.11.0
+
+# django rest framework dependencies
+djangorestframework==3.11.0
+djangorestframework-simplejwt==4.4.0
+
