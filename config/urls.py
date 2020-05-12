@@ -3,7 +3,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
 from short_url.api.v1.views import RedirectToView
+
 api_v1 = [
     path('register/', include('accounts.api.v1.urls'), name='register'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
