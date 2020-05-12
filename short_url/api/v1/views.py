@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -8,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from datetime import datetime, timedelta
+
 from short_url.models import ShortUrl, Devices
 from .filters import FilterMixin
 from .serializer import ShortUrlCreateSerializer, DashboardUrlSeenSerializer, DashboardByBrowserSerializer, \
@@ -97,7 +99,7 @@ class DashboardViewSet(GenericViewSet, FilterMixin):
 
     @action(methods=['get'], detail=False)
     def url_seen(self, request, *args, **kwargs):
-        queryset = Devices.objects.select_related('url').filter(url__user=request.user)\
+        queryset = Devices.objects.select_related('url').filter(url__user=request.user) \
             .filter(**self.get_filter_kwargs()).values('url').annotate(total_seen=Count('url'))
 
         return self.paginate_and_response(queryset)
