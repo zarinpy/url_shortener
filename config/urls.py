@@ -10,9 +10,9 @@ api_v1 = [
     path('register/', include('accounts.api.v1.urls'), name='register'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('home/', include('short_url.api.v1.urls'), name='shortener'),
+    path('home/', include('short_url.api.v1.urls'), name='url_creator'),
 ]
 urlpatterns = [
     path('api/v1/', include((api_v1, 'url_shortener'), namespace='url_shortener')),
-    path(r'r/<str:input_url>/', RedirectToView.as_view(), name='shortener'),
+    path(r'r/<str:input_url>/', RedirectToView.as_view(), name='shorted'),
 ]

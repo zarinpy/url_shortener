@@ -1,12 +1,10 @@
-from datetime import datetime
-
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -24,18 +22,15 @@ class ShortUrlViewSet(GenericViewSet, CreateModelMixin):
     serializer_class = ShortUrlCreateSerializer
 
     def create(self, request, *args, **kwargs):
-        now = datetime.now()
         request.data['user'] = request.user.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         self.perform_create(serializer)
         shorted_url = serializer.data['base_url']
-        last = datetime.now() - now
         data = {
-            'shorted_url': 'http://127.0.0.1:8000/r/{0}/'.format(shorted_url)
+            'shorted_url': '{0}/r/{1}/'.format(request.META['HTTP_HOST'], shorted_url)
         }
-        print(last.microseconds / 1000)
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -72,7 +67,7 @@ class RedirectToView(APIView):
 
 class DashboardViewSet(GenericViewSet, FilterMixin):
     queryset = Devices.objects.none()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
     def get_serializer_class(self):
         if self.action == 'url_seen':
